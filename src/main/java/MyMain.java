@@ -7,8 +7,13 @@ public class MyMain {
     //      int x = "apple".compareTo("banana"); // x is negative
     //      int y = "banana".compareTo("apple"); // y is positive
     public static String findLastWord(String[] arr) {
-        // YOUR CODE HERE
-        return "";
+        String last="";
+        for (int i=0;i<arr.length;i++){
+            if (arr[i].compareTo(last)>0){
+                last=arr[i];
+            }
+        }
+        return last;
     }
 
     // Given a 2D array, return an 1D array of the last word
@@ -16,8 +21,11 @@ public class MyMain {
     // You can assume that the matrix will not be empty
     // Hint: use the previous method to help yourself!
     public static String[] findLastWord2D(String[][] mat) {
-        // YOUR CODE HERE
-        return null;
+        String[] lastList=new String[mat.length];
+        for (int i=0;i<mat.length;i++){
+            lastList[i]=findLastWord(mat[i]);
+        }
+        return lastList;
     }
 
     // Given a 2D array and some column index col
@@ -30,8 +38,13 @@ public class MyMain {
     // Hint: remember how the indexOf() method works?
     // alternatively, consider the contains() method
     public static int appleCounter(String[][] mat, int col) {
-        // YOUR CODE HERE
-        return -1;
+        int count=0;
+        for (int j=0;j<mat.length;j++){
+            if (mat[j][col].contains("apple")){
+                count++;
+            }
+        }
+        return count;
     }
 
     // Given a 2D array, return the column number corresponding
@@ -41,8 +54,16 @@ public class MyMain {
     // Hint: use your previous method!
     // Hint 2: you might need to loop through the columns!
     public static int findMostAppleColumn(String[][] mat) {
-        // YOUR CODE HERE
-        return -1;
+        int big=0;
+        int count=0;
+        for (int i=0;i<mat[0].length;i++){
+            int apples=appleCounter(mat,i);
+            if (apples>big){
+                big=apples;
+                count=i;
+            }
+        }
+        return count;
     }
 
 
@@ -70,8 +91,20 @@ public class MyMain {
     //       from top to bottom
 
     public static int[][] pascal(int height) {
-        // YOUR CODE HERE
-        return null;
+        int[][]pascalTri=new int[height][height];
+        for (int row=0;row<pascalTri.length;row++){
+            pascalTri[row][0]=1;
+        }
+        for (int diag=0;diag<pascalTri.length;diag++){
+            pascalTri[diag][diag]=1;
+        }
+        for (int row=1;row<pascalTri.length;row++){
+            for (int col=1;col<row+1;col++){
+                pascalTri[row][col]=pascalTri[row-1][col-1]+pascalTri[row-1][col];
+            }
+        }
+        return pascalTri;
+
     }
 
 
@@ -106,13 +139,50 @@ public class MyMain {
     // Hint 3: when thinking the diagonals, consider the following
     // * do you see any pattern for the row and col indexes for a diagonal?
     // * can you use a for loop that goes through that pattern?
+    public static int arraySum(int[] arr){
+        int sum=0;
+        for (int i:arr){
+            sum+=i;
+        }
+        return sum;
+    }
+    public static int colSum(int[][] mat,int col){
+        int sum=0;
+        for (int i=0;i<mat.length;i++){
+            sum+=mat[i][col];
+        }
+        return sum;
+    }
     public static boolean isMagic(int[][] mat) {
-        // YOUR CODE HERE
+        int rowSum=arraySum(mat[0]);
+        int sum1=0;
+        int sum2=0;
+        //int colSum=colSum(mat,0);
+        for (int row=0;row<mat.length;row++){
+            if (rowSum==arraySum(mat[row])){
+                for (int col=0;col<mat.length;col++){
+                    if (rowSum==colSum(mat,col)){
+                        for (int diag=0;diag<mat.length;diag++){
+                            sum1+=mat[diag][diag];
+                            sum2+=mat[diag][mat.length-diag-1];
+                        }
+                        if (rowSum==sum1&&rowSum==sum2){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
 
 
     public static void main(String[] args) {
-        // Write some code here to test your methods!
+        pascal(2);
+        String[][] mat1 = {  {"apple", "banana", "fig"},
+                {"kiwi", "pineapple", "applesauce"},
+                {"crabapple", "lime", "pomelo"}
+        };
+        findMostAppleColumn(mat1);
     }
 }
